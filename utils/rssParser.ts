@@ -38,10 +38,11 @@ export interface FeedSchema {
 	link: string;
 	date: string | undefined;
 	categories: string[] | undefined;
-	groupName: string;
+	siteTitle: string;
 }
 
 const rssParser = new Parser();
+
 const rssParseURL = async (url: string): Promise<CommonFeed> => {
 	const feed = await rssParser.parseURL(url);
 	return feed as CommonFeed;
@@ -54,6 +55,6 @@ export const getFeedItems = async (url: string) => {
 		link: item.link,
 		date: item.isoDate,
 		categories: item.categories,
-		groupName: feed.title,
+		siteTitle: feed.title,
 	})) satisfies FeedSchema[];
 };
