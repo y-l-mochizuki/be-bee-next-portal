@@ -8,7 +8,6 @@ import {
 	TypographyH1,
 	TypographyH2,
 	TypographyMuted,
-	TypographyP,
 } from "~/components/ui/Typography";
 
 type LoaderDataResponse = {
