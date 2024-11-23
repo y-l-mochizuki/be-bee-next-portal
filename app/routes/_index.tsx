@@ -3,6 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { SITE_NAME } from "const";
 import { getFeedItems, type FeedSchema } from "utils/rssParser";
 import { getOfficialSites } from "utils/supabase";
+import { Badge } from "~/components/ui/badge";
 import {
 	TypographyH1,
 	TypographyH2,
@@ -72,11 +73,9 @@ export default function Index() {
 						{section.feeds.map((feed, i) => (
 							<li key={`${feed.title}-${i}`}>
 								<Link to={feed.link} className="grid gap-2 pt-3 pb-4 border-b">
-									<TypographyP>{feed.title}</TypographyP>
-									<div className="flex justify-between items-center">
-										<div className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm leading-none">
-											{feed.siteTitle}
-										</div>
+									<h3 className="font-bold">{feed.title}</h3>
+									<div className="flex justify-between items-end">
+										<Badge variant="outline">{feed.siteTitle}</Badge>
 										<TypographyMuted>{formatDate(feed.date)}</TypographyMuted>
 									</div>
 								</Link>
