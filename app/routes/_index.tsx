@@ -69,17 +69,29 @@ export default function Index() {
 				<section key={section.heading}>
 					<TypographyH2>{section.heading}</TypographyH2>
 					<ul>
-						{section.feeds.map((feed, i) => (
-							<li key={`${feed.title}-${i}`}>
-								<Link to={feed.link} className="grid gap-2 pt-3 pb-4 border-b">
-									<h3 className="font-bold">{feed.title}</h3>
-									<div className="flex justify-between items-end">
-										<Badge variant="outline">{feed.siteTitle}</Badge>
-										<TypographyMuted>{formatDate(feed.date)}</TypographyMuted>
-									</div>
-								</Link>
-							</li>
-						))}
+						{section.feeds.map((feed, i) => {
+							const isNonLiveScheduleSection =
+								section.heading !== sections.liveSchedule.heading;
+
+							return (
+								<li key={`${feed.title}-${i}`}>
+									<Link
+										to={feed.link}
+										className="grid gap-2 pt-3 pb-4 border-b"
+									>
+										<h3 className="font-bold">{feed.title}</h3>
+										<div className="flex justify-between items-end">
+											<Badge variant="outline">{feed.siteTitle}</Badge>
+											{isNonLiveScheduleSection && (
+												<TypographyMuted>
+													{formatDate(feed.date)}
+												</TypographyMuted>
+											)}
+										</div>
+									</Link>
+								</li>
+							);
+						})}
 					</ul>
 				</section>
 			))}
