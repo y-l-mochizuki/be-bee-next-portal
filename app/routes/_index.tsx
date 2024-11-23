@@ -1,9 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { get888stingItems } from "feeds/888sting";
-import { getTheBethFeedItems } from "feeds/thebeth";
-import { getWhitripFeedItems } from "feeds/whitrip";
-import type { FeedSchema } from "utils/rssParser";
+import { getFeedItems, type FeedSchema } from "utils/rssParser";
+import { official_sites } from "utils/supabase";
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -17,17 +15,18 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-	const feedList = await Promise.all([
-		getTheBethFeedItems(),
-		getWhitripFeedItems(),
-		get888stingItems(),
-	]);
+	if (official_sites === null) {
+		throw new Response("サイト情報が見つかりません", {
+			status: 404,
+			statusText: "Not Found",
+		});
+	}
 
-	const mergedFeeds = feedList.flat().sort((a, b) => {
-		const dateA = a.date ?? new Date(0);
-		const dateB = b.date ?? new Date(0);
-		return new Date(dateB).getTime() - new Date(dateA).getTime();
-	});
+	const feedList = (
+		await Promise.all(official_sites?.map((site) => getFeedItems(site.rss_url)))
+	).flat();
+
+	const mergedFeeds = margeFeeds(feedList);
 
 	return {
 		feeds: mergedFeeds,
@@ -69,7 +68,7 @@ export default function Index() {
 									<div>{feed.title}</div>
 									<div className="flex justify-between text-sm">
 										<div className="px-1 bg-gray-600 rounded-sm">
-											{feed.groupName}
+											{feed.siteTitle}
 										</div>
 										<div className="text-gray-300">{formatDate(feed.date)}</div>
 									</div>
@@ -82,6 +81,14 @@ export default function Index() {
 		</div>
 	);
 }
+
+const margeFeeds = (feedList: FeedSchema[]) => {
+	return feedList.flat().sort((a, b) => {
+		const dateA = a.date ?? new Date(0);
+		const dateB = b.date ?? new Date(0);
+		return new Date(dateB).getTime() - new Date(dateA).getTime();
+	});
+};
 
 const filterByCategories = (
 	feeds: FeedSchema[],
