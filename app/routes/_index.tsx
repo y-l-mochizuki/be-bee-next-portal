@@ -1,7 +1,14 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { SITE_NAME } from "const";
 import { getFeedItems, type FeedSchema } from "utils/rssParser";
 import { getOfficialSites } from "utils/supabase";
+import {
+	TypographyH1,
+	TypographyH2,
+	TypographyMuted,
+	TypographyP,
+} from "~/components/ui/Typography";
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -38,6 +45,7 @@ export const loader = async () => {
 export default function Index() {
 	const { feeds } = useLoaderData<LoaderDataResponse>();
 
+	// TODO: supabase移行
 	const CATEGORIES = {
 		NEWS: ["ニュース", "NEWS", "トピックス"],
 		LIVE_SCHEDULE: ["ライブスケジュール"],
@@ -56,23 +64,20 @@ export default function Index() {
 
 	return (
 		<div className="max-w-md mx-auto p-6 grid gap-12">
-			<h1 className="text-4xl font-bold">BE BEe NEXT PORTAL</h1>
+			<TypographyH1>{SITE_NAME}</TypographyH1>
 			{Object.values(sections).map((section) => (
 				<section key={section.heading}>
-					<h2 className="font-bold text-xl">{section.heading}</h2>
+					<TypographyH2>{section.heading}</TypographyH2>
 					<ul>
 						{section.feeds.map((feed, i) => (
 							<li key={`${feed.title}-${i}`}>
-								<Link
-									to={feed.link}
-									className="grid gap-2 py-4 border-b border-gray-600"
-								>
-									<div>{feed.title}</div>
-									<div className="flex justify-between text-sm">
-										<div className="px-1 bg-gray-600 rounded-sm">
+								<Link to={feed.link} className="grid gap-2 pt-3 pb-4 border-b">
+									<TypographyP>{feed.title}</TypographyP>
+									<div className="flex justify-between items-center">
+										<div className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm leading-none">
 											{feed.siteTitle}
 										</div>
-										<div className="text-gray-300">{formatDate(feed.date)}</div>
+										<TypographyMuted>{formatDate(feed.date)}</TypographyMuted>
 									</div>
 								</Link>
 							</li>
