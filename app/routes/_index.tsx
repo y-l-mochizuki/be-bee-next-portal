@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getFeedItems, type FeedSchema } from "utils/rssParser";
-import { official_sites } from "utils/supabase";
+import { getOfficialSites } from "utils/supabase";
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -15,6 +15,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
+	const { data: official_sites } = await getOfficialSites();
+
 	if (official_sites === null) {
 		throw new Response("サイト情報が見つかりません", {
 			status: 404,

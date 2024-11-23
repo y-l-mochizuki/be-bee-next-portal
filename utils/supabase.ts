@@ -6,6 +6,5 @@ export const supabase = createClient<Database>(
 	process.env.SUPABASE_ANON_KEY || "",
 );
 
-export const { data: official_sites, error } = await supabase
-	.from("official_sites")
-	.select("*");
+export const getOfficialSites = () =>
+	supabase.from("official_sites").select("*");
