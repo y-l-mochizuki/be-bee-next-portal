@@ -6,7 +6,12 @@ import { formatFeeds, limitDisplayFeeds } from "utils/formatter";
 import type { FeedSchema } from "utils/rssParser";
 import { ScheduleCalendar } from "~/components/schedule-calendar";
 import { ArticleLink } from "~/components/ui/article-link";
-import { TypographyH1, TypographyH2 } from "~/components/ui/Typography";
+import {
+	TypographyH1,
+	TypographyH2,
+	TypographyMuted,
+} from "~/components/ui/Typography";
+import packageJson from "~/../package.json";
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -73,6 +78,10 @@ export default function Index() {
 					</section>
 				);
 			})}
+
+			<div className="flex justify-center">
+				<TypographyMuted>version {packageJson.version}</TypographyMuted>
+			</div>
 		</div>
 	);
 }
