@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 import { CATEGORIES } from "const";
 import { extractDateFromFeedTitle, formatFeeds } from "utils/formatter";
 import { cn } from "~/lib/utils";
-import { Drawer, DrawerContent } from "./ui/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "./ui/drawer";
 import { useState } from "react";
 import { ArticleLink } from "./ui/article-link";
 
@@ -17,6 +17,7 @@ type Props = {
 export const ScheduleCalendar = ({ feeds }: Props) => {
 	const [open, setOpen] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	const formattedDate = formatDate(selectedDate);
 	const scheduleFeeds = getScheduleFeedsByDate(
 		feeds,
 		selectedDate ?? new Date(),
@@ -72,23 +73,28 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 			/>
 			<Drawer open={open} onClose={handleClose}>
 				<DrawerContent className="h-[90vh]">
-					<div className="overflow-y-scroll flex-1 w-full max-w-md mx-auto mt-4 p-6 pt-0">
-						{isEmptyScheduleFeeds ? (
-							<div className="flex justify-center items-center w-full h-full">
-								{EMPTY_SCHEDULE_MESSAGE}
-							</div>
-						) : (
-							scheduleFeeds.map((feed) => (
-								<ArticleLink
-									key={feed.link}
-									href={feed.link}
-									title={feed.title}
-									groupName={feed.groupName}
-									date={selectedDate?.toISOString() ?? ""}
-									isHiddenDate
-								/>
-							))
-						)}
+					<div className="overflow-y-scroll w-full mt-4">
+						<div className="flex-1 w-full max-w-md mx-auto p-6 pt-0">
+							<DrawerHeader className="p-0 text-left">
+								<DrawerTitle>{formattedDate}</DrawerTitle>
+							</DrawerHeader>
+							{isEmptyScheduleFeeds ? (
+								<div className="flex justify-center items-center w-full h-full">
+									{EMPTY_SCHEDULE_MESSAGE}
+								</div>
+							) : (
+								scheduleFeeds.map((feed) => (
+									<ArticleLink
+										key={feed.link}
+										href={feed.link}
+										title={feed.title}
+										groupName={feed.groupName}
+										date={selectedDate?.toISOString() ?? ""}
+										isHiddenDate
+									/>
+								))
+							)}
+						</div>
 					</div>
 				</DrawerContent>
 			</Drawer>
@@ -130,6 +136,18 @@ const Cell = ({ date, groupNames }: CellProps) => {
 			</div>
 		</div>
 	);
+};
+
+const formatDate = (date: Date | null): string => {
+	if (!date) return "";
+	return new Intl.DateTimeFormat("ja-JP", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		weekday: "short",
+	})
+		.format(date)
+		.replace(/\//g, ".");
 };
 
 const getScheduleFeedsByDate = (feeds: FeedSchema[], targetDate: Date) => {
