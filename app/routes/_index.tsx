@@ -42,11 +42,11 @@ export default function Index() {
 	const sections = {
 		schedule: {
 			heading: CATEGORIES.SCHEDULE,
-			feeds: sortFeeds(getFeedsByCategory(feeds, CATEGORIES.SCHEDULE)),
+			feeds: formatFeeds(feeds, CATEGORIES.SCHEDULE),
 		},
 		news: {
 			heading: CATEGORIES.NEWS,
-			feeds: getFeedsByCategory(feeds, CATEGORIES.NEWS),
+			feeds: formatFeeds(feeds, CATEGORIES.NEWS),
 		},
 	};
 
@@ -80,13 +80,40 @@ export default function Index() {
 	);
 }
 
+const formatFeeds = (feeds: FeedSchema[], categoryName: string) => {
+	switch (categoryName) {
+		case CATEGORIES.SCHEDULE: {
+			const feedsByCategory = getFeedsByCategory(feeds, CATEGORIES.SCHEDULE);
+			const sortedFeedsByScheduleDate =
+				sortFeedsByScheduleDate(feedsByCategory);
+			return sortedFeedsByScheduleDate;
+		}
+
+		case CATEGORIES.NEWS: {
+			const feedsByCategory = getFeedsByCategory(feeds, CATEGORIES.NEWS);
+			const sortedFeedsByPostDate = sortFeedsByPostDate(feedsByCategory);
+			return sortedFeedsByPostDate;
+		}
+
+		default:
+			return [] as FeedSchema[];
+	}
+};
+
 const getFeedsByCategory = (feeds: FeedSchema[], categoryName: string) => {
 	return feeds.filter((feed) => feed.categoryName === categoryName);
 };
 
-const sortFeeds = (feeds: FeedSchema[]) => {
+const sortFeedsByPostDate = (feeds: FeedSchema[]) => {
 	return feeds.sort((a, b) => {
-		console.log("aaa", a.title);
+		const dateA = new Date(a.date ?? 0);
+		const dateB = new Date(b.date ?? 0);
+		return dateB.getTime() - dateA.getTime();
+	});
+};
+
+const sortFeedsByScheduleDate = (feeds: FeedSchema[]) => {
+	return feeds.sort((a, b) => {
 		const extractDate = (title: string): Date => {
 			// 2024.12.22 や 2024.12.22(日) などの形式に対応
 			const match = title.match(/(\d{4})\.(\d{2})\.(\d{2})(?:\(.\))?/);
