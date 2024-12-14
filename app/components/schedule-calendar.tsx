@@ -73,10 +73,12 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 			/>
 			<Drawer open={open} onClose={handleClose}>
 				<DrawerContent className="h-[80vh]">
-					<div className="overflow-y-scroll w-full mt-4">
-						<div className="flex-1 w-full max-w-md mx-auto p-6 pt-0">
-							<DrawerHeader className="p-0 text-left">
-								<DrawerTitle>{formattedDate}</DrawerTitle>
+					<div className="overflow-y-scroll flex-1 w-full mt-4">
+						<div className="flex-1 w-full h-full max-w-md mx-auto p-6 pt-0">
+							<DrawerHeader className="p-0 text-left mb-3">
+								<DrawerTitle className="text-xs opacity-50">
+									{formattedDate}
+								</DrawerTitle>
 							</DrawerHeader>
 							{isEmptyScheduleFeeds ? (
 								<div className="flex justify-center items-center w-full h-full">
