@@ -1,3 +1,5 @@
+"use client";
+
 import type { FeedSchema } from "utils/rssParser";
 import { Calendar } from "./ui/calendar";
 import { Badge } from "./ui/badge";
