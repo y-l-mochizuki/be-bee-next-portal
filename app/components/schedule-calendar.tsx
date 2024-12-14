@@ -41,11 +41,8 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 			components={{
 				// eslint-disable-next-line react/prop-types
 				DayContent: ({ date }) => {
-					// eslint-disable-next-line react/prop-types
-					const day = date.getDate().toLocaleString();
 					const groupNames = getMatchingGroupNames(feeds, date);
-
-					return <Cell day={day} groupNames={groupNames} />;
+					return <Cell date={date} groupNames={groupNames} />;
 				},
 			}}
 		/>
@@ -53,13 +50,16 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 };
 
 type CellProps = {
-	day: string;
+	date: Date;
 	groupNames: string[];
 };
 
-const Cell = ({ day, groupNames }: CellProps) => {
-	const isToday = day === new Date().getDate().toLocaleString();
+const Cell = ({ date, groupNames }: CellProps) => {
+	const today = new Date().toDateString();
+	const isToday = date.toDateString() === today;
+	const currentDay = date.getDate();
 	const duplicatesRemovedGroupNames = Array.from(new Set(groupNames));
+
 	return (
 		<div className="grid content-start gap-2 h-full">
 			<div
@@ -68,7 +68,7 @@ const Cell = ({ day, groupNames }: CellProps) => {
 					isToday && "bg-white text-black",
 				)}
 			>
-				{day}
+				{currentDay}
 			</div>
 			<div className="grid gap-0.5">
 				{duplicatesRemovedGroupNames.map((groupName) => (
