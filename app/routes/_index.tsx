@@ -55,7 +55,7 @@ export default function Index() {
 			<TypographyH1>{SITE_NAME}</TypographyH1>
 			{Object.values(sections).map((section) => (
 				<section key={section.heading}>
-					<TypographyH2>{section.heading}</TypographyH2>
+					<TypographyH2>{section.heading.toLocaleUpperCase()}</TypographyH2>
 					{limitDisplayFeeds(section.feeds).map((feed, i) => {
 						const isNonLiveScheduleSection =
 							section.heading !== CATEGORIES.SCHEDULE;
