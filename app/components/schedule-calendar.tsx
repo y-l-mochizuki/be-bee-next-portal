@@ -32,8 +32,8 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 					"flex-1 h-auto min-h-7 bg-none hover:bg-transparent hover:text-inherit",
 				caption: "px-6 relative flex justify-between items-center",
 				nav: "flex gap-2",
-				nav_button_previous: "min-w-10 min-h-10",
-				nav_button_next: "min-w-10 min-h-10",
+				nav_button_previous: "aspect-square	min-w-10",
+				nav_button_next: "aspect-square	min-w-10",
 			}}
 			components={{
 				// eslint-disable-next-line react/prop-types
