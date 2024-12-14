@@ -72,7 +72,7 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 				}}
 			/>
 			<Drawer open={open} onClose={handleClose}>
-				<DrawerContent className="h-[90vh]">
+				<DrawerContent className="h-[80vh]">
 					<div className="overflow-y-scroll w-full mt-4">
 						<div className="flex-1 w-full max-w-md mx-auto p-6 pt-0">
 							<DrawerHeader className="p-0 text-left">
