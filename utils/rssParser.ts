@@ -36,9 +36,9 @@ export interface PaginationLinks {
 export interface FeedSchema {
 	title: string;
 	link: string;
+	groupName: string;
+	categoryName: string;
 	date: string | undefined;
-	categories: string[] | undefined;
-	siteTitle: string;
 }
 
 const rssParser = new Parser();
@@ -48,13 +48,17 @@ const rssParseURL = async (url: string): Promise<CommonFeed> => {
 	return feed as CommonFeed;
 };
 
-export const getFeedItems = async (url: string) => {
-	const feed = await rssParseURL(url);
+export const getFeeds = async (args: {
+	url: string;
+	groupName: string;
+	categoryName: string;
+}) => {
+	const feed = await rssParseURL(args.url);
 	return feed.items.map((item) => ({
 		title: item.title,
 		link: item.link,
+		groupName: args.groupName,
+		categoryName: args.categoryName,
 		date: item.isoDate,
-		categories: item.categories,
-		siteTitle: feed.title,
 	})) satisfies FeedSchema[];
 };

@@ -9,6 +9,87 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      feed_types: {
+        Row: {
+          created_at: string
+          id: number
+          type_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          type_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          type_name?: string
+        }
+        Relationships: []
+      }
+      feeds: {
+        Row: {
+          created_at: string
+          feed_type_id: number | null
+          feed_url: string
+          group_id: number | null
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          feed_type_id?: number | null
+          feed_url: string
+          group_id?: number | null
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          feed_type_id?: number | null
+          feed_url?: string
+          group_id?: number | null
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feeds_feed_type_id_fkey"
+            columns: ["feed_type_id"]
+            isOneToOne: false
+            referencedRelation: "feed_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feeds_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string
+          id: number
+          is_archived: boolean
+          name: string
+          site_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          is_archived?: boolean
+          name: string
+          site_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          is_archived?: boolean
+          name?: string
+          site_url?: string
+        }
+        Relationships: []
+      }
       official_sites: {
         Row: {
           created_at: string
@@ -36,9 +117,52 @@ export type Database = {
         }
         Relationships: []
       }
+      videos: {
+        Row: {
+          created_at: string
+          id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      youtube_videos: {
+        Row: {
+          created_at: string
+          embed_string: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          embed_string: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          embed_string?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      feed_details: {
+        Row: {
+          feed_type_name: string | null
+          feed_url: string | null
+          group_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

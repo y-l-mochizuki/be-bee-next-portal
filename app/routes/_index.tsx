@@ -1,14 +1,21 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { SITE_NAME } from "const";
-import { getFeedItems, type FeedSchema } from "utils/rssParser";
-import { getOfficialSites } from "utils/supabase";
+import { getFeedDetails } from "database/feed-details";
+import type { FeedSchema } from "utils/rssParser";
 import { Badge } from "~/components/ui/badge";
 import {
 	TypographyH1,
 	TypographyH2,
 	TypographyMuted,
 } from "~/components/ui/Typography";
+
+const CATEGORIES = {
+	SCHEDULE: "schedule",
+	NEWS: "news",
+};
+
+const DISPLAY_LIMIT = 10;
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -22,43 +29,24 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-	const { data: official_sites } = await getOfficialSites();
-
-	if (official_sites === null) {
-		throw new Response("サイト情報が見つかりません", {
-			status: 404,
-			statusText: "Not Found",
-		});
-	}
-
-	const feedList = (
-		await Promise.all(official_sites?.map((site) => getFeedItems(site.rss_url)))
-	).flat();
-
-	const mergedFeeds = margeFeeds(feedList);
+	const { data: feeds } = await getFeedDetails();
 
 	return {
-		feeds: mergedFeeds,
+		feeds,
 	};
 };
 
 export default function Index() {
 	const { feeds } = useLoaderData<LoaderDataResponse>();
 
-	// TODO: supabase移行
-	const CATEGORIES = {
-		NEWS: ["ニュース", "NEWS", "トピックス"],
-		LIVE_SCHEDULE: ["ライブスケジュール"],
-	} as const;
-
 	const sections = {
-		liveSchedule: {
-			heading: "LIVE SCHEDULE",
-			feeds: filterByCategories(feeds, CATEGORIES.LIVE_SCHEDULE),
+		schedule: {
+			heading: CATEGORIES.SCHEDULE,
+			feeds: formatFeeds(feeds, CATEGORIES.SCHEDULE),
 		},
 		news: {
-			heading: "NEWS",
-			feeds: filterByCategories(feeds, CATEGORIES.NEWS),
+			heading: CATEGORIES.NEWS,
+			feeds: formatFeeds(feeds, CATEGORIES.NEWS),
 		},
 	};
 
@@ -67,53 +55,84 @@ export default function Index() {
 			<TypographyH1>{SITE_NAME}</TypographyH1>
 			{Object.values(sections).map((section) => (
 				<section key={section.heading}>
-					<TypographyH2>{section.heading}</TypographyH2>
-					<ul>
-						{section.feeds.map((feed, i) => {
-							const isNonLiveScheduleSection =
-								section.heading !== sections.liveSchedule.heading;
+					<TypographyH2>{section.heading.toLocaleUpperCase()}</TypographyH2>
+					{limitDisplayFeeds(section.feeds).map((feed, i) => {
+						const isNonLiveScheduleSection =
+							section.heading !== CATEGORIES.SCHEDULE;
 
-							return (
-								<li key={`${feed.title}-${i}`}>
-									<Link
-										to={feed.link}
-										className="grid gap-2 pt-3 pb-4 border-b"
-									>
-										<h3 className="font-bold">{feed.title}</h3>
-										<div className="flex justify-between items-end">
-											<Badge variant="outline">{feed.siteTitle}</Badge>
-											{isNonLiveScheduleSection && (
-												<TypographyMuted>
-													{formatDate(feed.date)}
-												</TypographyMuted>
-											)}
-										</div>
-									</Link>
-								</li>
-							);
-						})}
-					</ul>
+						return (
+							<section key={`${feed.title}-${i}`}>
+								<Link to={feed.link} className="grid gap-2 pt-3 pb-4 border-b">
+									<h3 className="font-bold">{feed.title}</h3>
+									<div className="flex justify-between items-end">
+										<Badge variant="outline">{feed.groupName}</Badge>
+										{isNonLiveScheduleSection && (
+											<TypographyMuted>{formatDate(feed.date)}</TypographyMuted>
+										)}
+									</div>
+								</Link>
+							</section>
+						);
+					})}
 				</section>
 			))}
 		</div>
 	);
 }
 
-const margeFeeds = (feedList: FeedSchema[]) => {
-	return feedList.flat().sort((a, b) => {
-		const dateA = a.date ?? new Date(0);
-		const dateB = b.date ?? new Date(0);
-		return new Date(dateB).getTime() - new Date(dateA).getTime();
+const formatFeeds = (feeds: FeedSchema[], categoryName: string) => {
+	switch (categoryName) {
+		case CATEGORIES.SCHEDULE: {
+			const feedsByCategory = getFeedsByCategory(feeds, CATEGORIES.SCHEDULE);
+			const sortedFeedsByScheduleDate =
+				sortFeedsByScheduleDate(feedsByCategory);
+			return sortedFeedsByScheduleDate;
+		}
+
+		case CATEGORIES.NEWS: {
+			const feedsByCategory = getFeedsByCategory(feeds, CATEGORIES.NEWS);
+			const sortedFeedsByPostDate = sortFeedsByPostDate(feedsByCategory);
+			return sortedFeedsByPostDate;
+		}
+
+		default:
+			return [] as FeedSchema[];
+	}
+};
+
+const getFeedsByCategory = (feeds: FeedSchema[], categoryName: string) => {
+	return feeds.filter((feed) => feed.categoryName === categoryName);
+};
+
+const sortFeedsByPostDate = (feeds: FeedSchema[]) => {
+	return feeds.sort((a, b) => {
+		const dateA = new Date(a.date ?? 0);
+		const dateB = new Date(b.date ?? 0);
+		return dateB.getTime() - dateA.getTime();
 	});
 };
 
-const filterByCategories = (
-	feeds: FeedSchema[],
-	targetCategories: readonly string[],
-) => {
-	return feeds.filter((feed) =>
-		feed.categories?.some((category) => targetCategories.includes(category)),
-	);
+const sortFeedsByScheduleDate = (feeds: FeedSchema[]) => {
+	return feeds.sort((a, b) => {
+		const extractDate = (title: string): Date => {
+			// 2024.12.22 や 2024.12.22(日) などの形式に対応
+			const match = title.match(/(\d{4})\.(\d{2})\.(\d{2})(?:\(.\))?/);
+			if (!match) return new Date(0);
+
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const [_, year, month, day] = match;
+			return new Date(Number(year), Number(month) - 1, Number(day));
+		};
+
+		const dateA = extractDate(a.title);
+		const dateB = extractDate(b.title);
+
+		return dateB.getTime() - dateA.getTime();
+	});
+};
+
+const limitDisplayFeeds = (feeds: FeedSchema[]) => {
+	return feeds.slice(0, DISPLAY_LIMIT);
 };
 
 const formatDate = (dateStr?: string) => {
