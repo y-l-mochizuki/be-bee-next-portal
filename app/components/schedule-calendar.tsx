@@ -51,8 +51,8 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 					root: "px-0 py-0",
 					caption_end: "w-full",
 					head: "[&>tr>th]:flex-1 [&>tr]:justify-between [&>tr]:px-2",
-					tbody: "[&>tr]:justify-between [&>tr]:px-2",
-					cell: "flex w-full p-0.25",
+					tbody: "[&>tr]:justify-between [&>tr]:px-2 [&>tr]:border-t",
+					cell: "flex w-full min-h-[88px] p-0.25",
 					button:
 						"flex-1 h-auto min-h-7 bg-none hover:bg-transparent hover:text-inherit",
 					caption: "px-6 relative flex justify-between items-center",
@@ -116,10 +116,10 @@ const Cell = ({ date, groupNames }: CellProps) => {
 	const duplicatesRemovedGroupNames = Array.from(new Set(groupNames));
 
 	return (
-		<div className="grid content-start gap-2 h-full">
+		<div className="grid content-start h-full">
 			<div
 				className={cn(
-					"flex justify-center items-center w-5 h-5 mx-auto rounded-full",
+					"flex justify-center items-center w-5 h-5 mx-auto my-2 rounded-full",
 					isToday && "bg-white text-black",
 				)}
 			>
