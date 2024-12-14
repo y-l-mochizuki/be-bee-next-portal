@@ -1,16 +1,12 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { CATEGORIES, SITE_NAME } from "const";
 import { getFeedDetails } from "database/feed-details";
-import { formatDate, formatFeeds, limitDisplayFeeds } from "utils/formatter";
+import { formatFeeds, limitDisplayFeeds } from "utils/formatter";
 import type { FeedSchema } from "utils/rssParser";
 import { ScheduleCalendar } from "~/components/schedule-calendar";
-import { Badge } from "~/components/ui/badge";
-import {
-	TypographyH1,
-	TypographyH2,
-	TypographyMuted,
-} from "~/components/ui/Typography";
+import { ArticleLink } from "~/components/ui/article-link";
+import { TypographyH1, TypographyH2 } from "~/components/ui/Typography";
 
 type LoaderDataResponse = {
 	feeds: FeedSchema[];
@@ -63,18 +59,15 @@ export default function Index() {
 				return (
 					<section key={section.heading}>
 						<TypographyH2>{sectionHeading}</TypographyH2>
-
 						{limitDisplayFeeds(section.feeds).map((feed, i) => (
 							<section key={`${feed.title}-${i}`}>
-								<Link to={feed.link} className="grid gap-2 pt-3 pb-4 border-b">
-									<h3 className="font-bold">{feed.title}</h3>
-									<div className="flex justify-between items-end">
-										<Badge variant="secondary">{feed.groupName}</Badge>
-										{!isScheduleSection && (
-											<TypographyMuted>{formatDate(feed.date)}</TypographyMuted>
-										)}
-									</div>
-								</Link>
+								<ArticleLink
+									href={feed.link}
+									title={feed.title}
+									groupName={feed.groupName}
+									date={feed.date ?? new Date().toISOString()}
+									isHiddenDate={isScheduleSection}
+								/>
 							</section>
 						))}
 					</section>
