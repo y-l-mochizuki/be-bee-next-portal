@@ -33,8 +33,10 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 				caption: "px-6 relative flex justify-between items-center",
 				caption_label: "text-base font-bold",
 				nav: "flex gap-2",
-				nav_button_previous: "aspect-square	min-w-10 opacity-100",
-				nav_button_next: "aspect-square	min-w-10 opacity-100",
+				nav_button_previous:
+					"aspect-square	min-w-10 !opacity-100 hover:opacity-100",
+				nav_button_next:
+					"aspect-square	min-w-10 !opacity-100 hover:opacity-100",
 			}}
 			components={{
 				// eslint-disable-next-line react/prop-types
