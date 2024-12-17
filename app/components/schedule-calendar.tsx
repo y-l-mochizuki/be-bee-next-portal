@@ -52,7 +52,7 @@ export const ScheduleCalendar = ({ feeds }: Props) => {
 					caption_end: "w-full",
 					head: "[&>tr>th]:flex-1 [&>tr]:justify-between [&>tr]:px-2",
 					tbody: "[&>tr]:justify-between [&>tr]:px-2 [&>tr]:border-t",
-					cell: "flex w-full min-h-[88px] p-0.25",
+					cell: "flex w-full min-h-[96px] p-0.25",
 					button:
 						"flex-1 h-auto min-h-7 bg-none hover:bg-transparent hover:text-inherit",
 					caption: "px-6 relative flex justify-between items-center",
