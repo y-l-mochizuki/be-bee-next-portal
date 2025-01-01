@@ -90,6 +90,7 @@ export default function Index() {
 															href={item.xLink}
 															target="_blank"
 															rel="noreferrer"
+															className="flex border border-white rounded-[4px] p-1"
 														>
 															<XIcon size={16} />
 														</a>
