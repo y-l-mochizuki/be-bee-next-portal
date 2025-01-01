@@ -37,7 +37,9 @@ export const CarouselWithVertical = ({ renderItem }: Props) => {
 
 	return (
 		<div className="overflow-hidden relative" ref={emblaRef}>
-			<div className="flex flex-col h-screen">{renderItem(handleClickDot)}</div>
+			<div className="flex flex-col h-[100svh]">
+				{renderItem(handleClickDot)}
+			</div>
 			<div className="absolute top-0 right-0 z-10 flex flex-col justify-center h-full">
 				{dots.map((dot) => (
 					<button
