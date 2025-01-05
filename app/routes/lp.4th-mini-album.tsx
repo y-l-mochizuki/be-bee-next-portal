@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { ShoppingCart } from "lucide-react";
+import { OFFICIAL_INFO } from "const";
+import { Play, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -122,7 +123,7 @@ export default function MadanteLp() {
 								<a
 									ref={lastSectionRef}
 									href="https://thebeth.official.ec/items/96605556"
-									className="relative w-full h-14 border-4 border-white text-black bg-yellow-400"
+									className="relative block w-full h-auto py-3 border-4 border-white text-black bg-yellow-400"
 								>
 									<div className="flex justify-start items-center gap-4 w-full font-bold">
 										<ShoppingCart strokeWidth={3} className="!w-5 !h-5 -mx-1" />
@@ -137,6 +138,28 @@ export default function MadanteLp() {
 							</Button>
 						</CardContent>
 					</Card>
+				</section>
+				<section className="text-center">
+					<TypographyH2>THE+BETH</TypographyH2>
+					<div className="flex flex-wrap justify-center gap-4 py-4">
+						{Object.values({
+							...OFFICIAL_INFO,
+							THEBETH_PROFILE,
+						}).map((info) => {
+							return (
+								<a
+									key={info.URL}
+									href={info.URL}
+									target="_blank"
+									rel="noreferrer"
+									className="flex items-center gap-1"
+								>
+									<Play size={12} />
+									{info.TITLE}
+								</a>
+							);
+						})}
+					</div>
 				</section>
 			</main>
 
@@ -204,3 +227,8 @@ const TRACK_LIST = [
 		CREDITS_2: "music & arranged by 高橋慶",
 	},
 ] as const;
+
+const THEBETH_PROFILE = {
+	TITLE: "THE+BETH(ザベス)とは？",
+	URL: "/profile",
+};
