@@ -99,7 +99,7 @@ type ProfilesScreenProps = {
 };
 
 const ProfilesScreen = ({ onClickProfile }: ProfilesScreenProps) => {
-	// NOTE: AI_CARBONARA がセンターに来るようにする
+	// NOTE: AI_CARBONARA をセンターにする
 	const profilesReordered = Object.values([
 		PROFILE.REINA_CRESCENDO,
 		PROFILE.AI_CARBONARA,
