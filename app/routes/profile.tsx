@@ -1,3 +1,4 @@
+import { OFFICIAL_INFO } from "const";
 import { ChevronRight, ChevronsDown } from "lucide-react";
 import { CarouselItem, CarouselWithVertical } from "~/components/carousel";
 import { XIcon } from "~/components/XIcon";
@@ -70,29 +71,6 @@ const PROFILE = {
 
 const THEBETH_LOGO_URL =
 	"https://prd.resource-api.lit.link/images/creators/9d1ed2bd-ab22-4628-9dfc-2ed86aade96d/168952ed-ddd8-4ce8-b2a4-cc3ebb2feb71.png";
-
-const OFFICIAL_INFO = {
-	SITE: {
-		TITLE: "OFFICIAL SITE",
-		URL: "https://thebeth.jp/",
-	},
-	WEB_SHOP: {
-		TITLE: "OFFICIAL WEB SHOP",
-		URL: "https://thebeth.official.ec/",
-	},
-	MUSIC_STREAMING_SERVICES: {
-		TITLE: "Music Streaming Services",
-		URL: "https://lit.link/THEBETH",
-	},
-	X: {
-		TITLE: "X(Twitter)",
-		URL: "https://x.com/THE_BETH_JP",
-	},
-	YOUTUBE: {
-		TITLE: "YOUTUBE",
-		URL: "https://www.youtube.com/@THEBETHOffcial-",
-	},
-};
 
 type ProfilesScreenProps = {
 	onClickProfile: (index: number) => void;
