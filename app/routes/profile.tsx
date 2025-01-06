@@ -1,8 +1,49 @@
+import type { MetaFunction } from "@remix-run/node";
 import { OFFICIAL_INFO } from "const";
 import { ChevronRight, ChevronsDown } from "lucide-react";
 import { CarouselItem, CarouselWithVertical } from "~/components/carousel";
 import { XIcon } from "~/components/XIcon";
 import { cn } from "~/lib/utils";
+
+const OGP_URL = "https://be-bee-next-portal.vercel.app/profile.png";
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: PROFILE_INFO.TITLE },
+		{
+			name: "description",
+			content: PROFILE_INFO.DESCRIPTION,
+		},
+		{
+			property: "og:title",
+			content: PROFILE_INFO.TITLE,
+		},
+		{
+			property: "og:description",
+			content: PROFILE_INFO.DESCRIPTION,
+		},
+		{
+			property: "og:image",
+			content: OGP_URL,
+		},
+		{
+			name: "twitter:card",
+			content: "summary_large_image",
+		},
+		{
+			name: "twitter:title",
+			content: PROFILE_INFO.TITLE,
+		},
+		{
+			name: "twitter:description",
+			content: PROFILE_INFO.DESCRIPTION,
+		},
+		{
+			name: "twitter:image",
+			content: OGP_URL,
+		},
+	];
+};
 
 export default function Index() {
 	return (
