@@ -11,26 +11,36 @@ export const meta: MetaFunction = () => {
 	return [
 		{ title: ALBUM_INFO.PAGE_TITLE },
 		{
+			name: "description",
+			content: `${ALBUM_INFO.RELEASE_DATE} Release`,
+		},
+		{
 			property: "og:title",
 			content: ALBUM_INFO.PAGE_TITLE,
 		},
 		{
-			property: "og:image",
-			content:
-				"https://pbs.twimg.com/profile_banners/1321328083303976962/1731932621/1500x500",
+			property: "og:description",
+			content: `${ALBUM_INFO.RELEASE_DATE} Release`,
 		},
 		{
-			name: "twitter:title",
-			content: ALBUM_INFO.PAGE_TITLE,
+			property: "og:image",
+			content: ALBUM_INFO.IMAGE_URL,
 		},
 		{
 			name: "twitter:card",
 			content: "summary_large_image",
 		},
 		{
+			name: "twitter:title",
+			content: ALBUM_INFO.PAGE_TITLE,
+		},
+		{
+			name: "twitter:description",
+			content: `${ALBUM_INFO.RELEASE_DATE} Release`,
+		},
+		{
 			name: "twitter:image",
-			content:
-				"https://pbs.twimg.com/profile_banners/1321328083303976962/1731932621/1500x500",
+			content: ALBUM_INFO.IMAGE_URL,
 		},
 	];
 };
@@ -122,7 +132,7 @@ export default function MadanteLp() {
 							<Button asChild>
 								<a
 									ref={lastSectionRef}
-									href="https://thebeth.official.ec/items/96605556"
+									href={ALBUM_INFO.SHOP_URL}
 									className="relative block w-full h-auto py-3 border-4 border-white text-black bg-yellow-400"
 								>
 									<div className="flex justify-start items-center gap-4 w-full font-bold">
