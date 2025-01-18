@@ -36,15 +36,20 @@ export const LiveMap = ({ data }: Props) => {
 
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
-	const getYYYYMMDD = (date: string) => {
-		return date.split("T")[0];
+	const toLocaleStringJa = (date: Date) => {
+		return date.toLocaleString("ja-JP", {
+			timeZone: "Asia/Tokyo",
+			year: "numeric",
+			month: "numeric",
+			day: "numeric",
+		});
 	};
 
 	const schedulesForSelectedDate = data.filter((schedule) => {
-		const eventDateString = getYYYYMMDD(schedule.eventDate);
-		const selectedDateString = getYYYYMMDD(selectedDate.toISOString());
+		const eventDateWithJa = toLocaleStringJa(new Date(schedule.eventDate));
+		const selectedDateWithJa = toLocaleStringJa(selectedDate);
 
-		return eventDateString === selectedDateString;
+		return eventDateWithJa === selectedDateWithJa;
 	});
 
 	const map = useMap();

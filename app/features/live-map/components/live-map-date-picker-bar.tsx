@@ -1,5 +1,5 @@
 import { Button } from "~/components/ui/button";
-import { getYYYYMMDD } from "../utils";
+import { toLocaleStringJa } from "~/lib/utils";
 
 type Props = {
 	dates: {
@@ -21,8 +21,7 @@ export const LiveMapDatePickerBar = ({
 		<div className="flex gap-2 p-2 overflow-x-scroll">
 			{dates.map(({ date, day, isToday, rawDate }) => {
 				const variant =
-					getYYYYMMDD(rawDate.toISOString()) ===
-					getYYYYMMDD(selectedDate.toISOString())
+					toLocaleStringJa(rawDate) === toLocaleStringJa(selectedDate)
 						? "default"
 						: "outline";
 
