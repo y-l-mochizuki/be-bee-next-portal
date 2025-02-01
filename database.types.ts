@@ -90,122 +90,6 @@ export type Database = {
         }
         Relationships: []
       }
-      live_event_groups: {
-        Row: {
-          created_at: string
-          id: number
-          live_event_id: number
-          live_group_id: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          live_event_id: number
-          live_group_id: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          live_event_id?: number
-          live_group_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "line_event_groups_live_event_id_fkey"
-            columns: ["live_event_id"]
-            isOneToOne: false
-            referencedRelation: "live_events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "line_event_groups_live_group_id_fkey"
-            columns: ["live_group_id"]
-            isOneToOne: false
-            referencedRelation: "live_groups"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      live_events: {
-        Row: {
-          created_at: string
-          event_date: string
-          id: number
-          live_venue_id: number
-          name: string | null
-          url: string | null
-        }
-        Insert: {
-          created_at?: string
-          event_date: string
-          id?: number
-          live_venue_id: number
-          name?: string | null
-          url?: string | null
-        }
-        Update: {
-          created_at?: string
-          event_date?: string
-          id?: number
-          live_venue_id?: number
-          name?: string | null
-          url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "live_event_venue_id_fkey"
-            columns: ["live_venue_id"]
-            isOneToOne: false
-            referencedRelation: "live_venues"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      live_groups: {
-        Row: {
-          created_at: string
-          id: number
-          name: string
-          thumbnail_url: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          name: string
-          thumbnail_url: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          name?: string
-          thumbnail_url?: string
-        }
-        Relationships: []
-      }
-      live_venues: {
-        Row: {
-          created_at: string
-          id: number
-          lat: number
-          lng: number
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          lat: number
-          lng: number
-          name: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          lat?: number
-          lng?: number
-          name?: string
-        }
-        Relationships: []
-      }
       official_sites: {
         Row: {
           created_at: string
@@ -276,12 +160,6 @@ export type Database = {
           feed_type_name: string | null
           feed_url: string | null
           group_name: string | null
-        }
-        Relationships: []
-      }
-      live_schedule: {
-        Row: {
-          event: Json | null
         }
         Relationships: []
       }
